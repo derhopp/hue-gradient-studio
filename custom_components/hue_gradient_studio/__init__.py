@@ -1,5 +1,9 @@
 """Hue Gradient Studio: scalable per-device ZHA color-gradient control.
 
+AI-assisted community project: substantial parts of this source were developed
+with OpenAI ChatGPT. Unofficial, not endorsed by Philips, Signify, Home Assistant,
+or HACS. See README.md for the project disclosure and trademark notice.
+
 Installed through HACS and configured using Home Assistant's UI.
 Storage: .storage/hue_gradient_studio (managed by Home Assistant).
 The Zigbee manufacturer command is model-specific, so the UI permits choosing
