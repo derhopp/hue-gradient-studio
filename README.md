@@ -28,7 +28,7 @@ lovelace:
       type: module
 ```
 
-For storage mode, the fallback manual path is **Settings → Dashboards → ⋮ → Resources → Add resource**, URL `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.0`, type **JavaScript Module**. Normally this is unnecessary: if the resource has not appeared shortly after startup, check **Settings → System → Logs** before adding it yourself. Avoid duplicate resource entries.
+For storage mode, the fallback manual path is **Settings → Dashboards → ⋮ → Resources → Add resource**, URL `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.0`, type **JavaScript Module**. Normally this is unnecessary: if the resource has not appeared shortly after startup, check **Settings → System → Logs** before adding it yourself. If the dashboard displays **Custom element doesn't exist: hue-gradient-studio**, check this resource URL and type, then reload the browser. Avoid duplicate resource entries.
 
 ## Upgrade from the original manually installed v3.0.1
 
@@ -95,4 +95,4 @@ These are offline smoke tests, not a live test against your installed Home Assis
 
 ## License
 
-No license has been selected for this repository. Choose a license explicitly before distributing the code to others (for example, if you intend to allow reuse), and review any third-party contributions.
+MIT license. See [LICENSE](LICENSE).
