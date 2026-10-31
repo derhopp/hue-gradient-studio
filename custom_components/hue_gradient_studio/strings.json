@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Hue Gradient Studio",
+        "description": "Enable Gradient Studio for your existing ZHA Philips Hue lights. No additional credentials are required."
+      }
+    },
+    "abort": {
+      "already_configured": "Hue Gradient Studio is already configured."
+    }
+  }
+}

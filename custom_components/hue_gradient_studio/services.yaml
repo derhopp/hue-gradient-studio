@@ -1,0 +1,59 @@
+apply:
+  name: Apply gradient
+  description: Apply a preset to selected Philips Hue lights (ZHA).
+  fields:
+    entity_id:
+      name: Lights
+      description: Optional. Omit to use saved selection from dashboard.
+      example: [light.philips_hue_schreibtisch]
+      selector:
+        entity:
+          domain: light
+          multiple: true
+    preset:
+      name: Preset
+      description: 1 to 4; omit to use each lamp's own active preset.
+      example: 2
+      selector:
+        number:
+          min: 1
+          max: 4
+          mode: box
+next:
+  name: Next gradient
+  description: Switch selected lights to their own next preset.
+  fields:
+    entity_id:
+      name: Lights
+      description: Optional. Omit to use dashboard selection.
+      selector:
+        entity:
+          domain: light
+          multiple: true
+previous:
+  name: Previous gradient
+  description: Switch selected lights to their own previous preset.
+  fields:
+    entity_id:
+      name: Lights
+      description: Optional. Omit to use dashboard selection.
+      selector:
+        entity:
+          domain: light
+          multiple: true
+set_auto:
+  name: Automatic gradient cycling
+  description: Turn automatic cycling on or off for selected lamps.
+  fields:
+    entity_id:
+      name: Lights
+      description: Optional. Omit to use dashboard selection.
+      selector:
+        entity:
+          domain: light
+          multiple: true
+    enabled:
+      name: Enable
+      required: true
+      selector:
+        boolean:

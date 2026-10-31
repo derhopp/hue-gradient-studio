@@ -1,0 +1,19 @@
+{
+  "domain": "hue_gradient_studio",
+  "name": "Hue Gradient Studio",
+  "version": "0.1.0",
+  "documentation": "https://github.com/derhopp/hue-gradient-studio",
+  "issue_tracker": "https://github.com/derhopp/hue-gradient-studio/issues",
+  "codeowners": [
+    "@derhopp"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "zha",
+    "http",
+    "websocket_api",
+    "lovelace"
+  ],
+  "iot_class": "local_push",
+  "integration_type": "helper"
+}

@@ -1,0 +1,13 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Hue Gradient Studio",
+        "description": "Aktiviert Gradient Studio für deine bereits in ZHA eingebundenen Philips-Hue-Leuchten. Es sind keine weiteren Zugangsdaten erforderlich."
+      }
+    },
+    "abort": {
+      "already_configured": "Hue Gradient Studio ist bereits eingerichtet."
+    }
+  }
+}

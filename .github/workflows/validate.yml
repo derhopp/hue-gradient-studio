@@ -1,0 +1,39 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hacs-validation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate HACS repository structure
+        uses: hacs/action@main
+        with:
+          category: integration
+
+  smoke-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Python and JSON structure
+        run: |
+          python -m compileall -q custom_components tests
+          python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Check Lovelace card
+        run: |
+          node --check custom_components/hue_gradient_studio/frontend/hue-gradient-studio.js
+          node tests/test_ui.cjs

@@ -1,0 +1,9 @@
+# ONLY for a single View's "Edit in YAML" in an EXISTING dashboard.
+# Other dashboard views/tabs stay untouched.
+title: Hue Gradient Studio
+path: hue-gradients
+type: masonry
+icon: mdi:palette
+cards:
+  - type: custom:hue-gradient-studio
+    title: Hue Gradient Studio

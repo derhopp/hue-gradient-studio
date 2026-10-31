@@ -1,0 +1,22 @@
+# EXAMPLES ONLY. Add individually in an automation's YAML editor.
+# 1. Use the Hue V2 "Hue short press" action in your EXISTING Blueprint:
+# - action: hue_gradient_studio.next
+# This targets the saved multi-selection from the dashboard.
+#
+# 2. Target particular lamps explicitly (not pasted into configuration.yaml):
+# - action: hue_gradient_studio.apply
+#   data:
+#     entity_id:
+#       - light.philips_hue_schreibtisch
+#       - light.some_other_hue_gradient
+#     preset: 2
+#
+# 3. Enable automatic switching for current selection:
+# - action: hue_gradient_studio.set_auto
+#   data:
+#     enabled: true
+#
+# 4. Disable automatic switching:
+# - action: hue_gradient_studio.set_auto
+#   data:
+#     enabled: false
