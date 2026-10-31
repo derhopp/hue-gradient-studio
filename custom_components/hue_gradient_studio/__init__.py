@@ -1,6 +1,6 @@
 """Hue Gradient Studio: scalable per-device ZHA color-gradient control.
 
-Installed using the Home Assistant UI (legacy YAML remains supported).
+Installed through HACS and configured using Home Assistant's UI.
 Storage: .storage/hue_gradient_studio (managed by Home Assistant).
 The Zigbee manufacturer command is model-specific, so the UI permits choosing
 between gradient (experimental except for tested devices) and solid-color mode.
@@ -29,8 +29,6 @@ from .frontend_resources import async_setup_frontend
 DOMAIN = "hue_gradient_studio"
 STORAGE_VERSION = 1
 _LOGGER = logging.getLogger(__name__)
-
-CONFIG_SCHEMA = vol.Schema({vol.Optional(DOMAIN): vol.Any(None, vol.Schema({}))}, extra=vol.ALLOW_EXTRA)
 
 MIN_INTERVAL = 30
 MAX_INTERVAL = 3600
@@ -171,29 +169,6 @@ class GradientManager:
             self._editable(target, devices)["presets"] = deepcopy(saved)
         await self.save()
 
-    async def import_legacy(self, target: str) -> int:
-        """One-time, opt-in migration from the old four Signe input_text helpers."""
-        devices = self.discover()
-        settings = self._editable(target, devices)
-        count = 0
-        for idx in range(1, 5):
-            state = self.hass.states.get(f"input_text.signe_gradient_preset_{idx}_colors")
-            if not state:
-                continue
-            colors = [c.strip() for c in state.state.split(",")]
-            try:
-                normalized = validate_colors(colors)
-            except ValueError:
-                continue
-            settings["presets"][idx - 1]["colors"] = normalized
-            count += 1
-        if count:
-            active = self.hass.states.get("input_select.signe_gradient_active")
-            if active and active.state in ("1", "2", "3", "4"):
-                settings["active"] = int(active.state)
-            await self.save()
-        return count
-
     def _targets(self, device_ids: list[str] | None = None, entity_ids: list[str] | None = None) -> list[str]:
         available = self.discover()
         if device_ids is not None:
@@ -304,16 +279,6 @@ class GradientManager:
                 self.tasks.pop(device_id, None)
 
 
-async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
-    """Keep v3 legacy YAML configuration working after the HACS migration.
-
-    For new installs without YAML, setup occurs through ``async_setup_entry``.
-    """
-    if DOMAIN in config:
-        await _ensure_setup(hass)
-    return True
-
-
 async def async_setup_entry(hass: HomeAssistant, entry) -> bool:
     """Set up the integration from Settings -> Devices & services."""
     await _ensure_setup(hass)
@@ -321,7 +286,7 @@ async def async_setup_entry(hass: HomeAssistant, entry) -> bool:
 
 
 async def _ensure_setup(hass: HomeAssistant) -> None:
-    """Register the existing manager/actions once, regardless of setup method."""
+    """Initialize the manager and register actions once per Home Assistant instance."""
     if DOMAIN in hass.data:
         return
     manager = GradientManager(hass)
@@ -367,7 +332,6 @@ async def _ensure_setup(hass: HomeAssistant) -> None:
     websocket_api.async_register_command(hass, ws_configure)
     websocket_api.async_register_command(hass, ws_control)
     websocket_api.async_register_command(hass, ws_copy)
-    websocket_api.async_register_command(hass, ws_import_legacy)
     return None
 
 
@@ -467,19 +431,5 @@ async def ws_copy(hass, connection, msg) -> None:
     try:
         await _manager(hass).copy_presets(msg["source"], msg["targets"])
         connection.send_result(msg["id"], {"ok": True})
-    except (ValueError, HomeAssistantError) as err:
-        _error(connection, msg, err)
-
-
-@websocket_api.require_admin
-@websocket_api.websocket_command({
-    vol.Required("type"): f"{DOMAIN}/import_legacy",
-    vol.Required("device_id"): cv.string,
-})
-@websocket_api.async_response
-async def ws_import_legacy(hass, connection, msg) -> None:
-    try:
-        count = await _manager(hass).import_legacy(msg["device_id"])
-        connection.send_result(msg["id"], {"imported": count})
     except (ValueError, HomeAssistantError) as err:
         _error(connection, msg, err)

@@ -24,7 +24,7 @@ def main() -> None:
     js = ROOT / 'custom_components/hue_gradient_studio/frontend/hue-gradient-studio.js'
     text = js.read_text(encoding='utf-8').replace('Hue Gradient Studio v'+old, 'Hue Gradient Studio v'+version)
     js.write_text(text, encoding='utf-8')
-    print(f'Updated {old} -> {version}. Write release notes, commit, tag, and publish a GitHub Release.')
+    print(f'Updated {old} -> {version}. Write release notes, run tests, and push to main. CI publishes a GitHub Release after validation succeeds.')
 
 
 if __name__ == '__main__':

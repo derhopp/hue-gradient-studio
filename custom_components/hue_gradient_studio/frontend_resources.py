@@ -1,7 +1,7 @@
 """Serve and register the bundled Lovelace editor.
 
 HACS installs files under custom_components/hue_gradient_studio, so the
-JavaScript asset is served from the integration rather than /config/www.
+JavaScript asset is served directly from the integration.
 """
 from __future__ import annotations
 
@@ -40,11 +40,7 @@ async def async_setup_frontend(hass: HomeAssistant, version: str) -> None:
                 await asyncio.sleep(2)
                 continue
 
-            # Home Assistant 2026.x exposes resource_mode, not mode.
-            # The old mode property is only a compatibility fallback.
-            resource_mode = getattr(
-                lovelace, "resource_mode", getattr(lovelace, "mode", None)
-            )
+            resource_mode = getattr(lovelace, "resource_mode", None)
             if resource_mode == "yaml":
                 _LOGGER.info(
                     "Lovelace resources use YAML; add %s manually as a "

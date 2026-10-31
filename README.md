@@ -1,88 +1,113 @@
-# Hue Gradient Studio — HACS Integration
+# Hue Gradient Studio
 
-> **Version 0.1.0** · Custom integration for Home Assistant **ZHA** with a bundled Lovelace color-gradient editor. This GitHub release is based on the previously working v3.0.1 multi-light prototype.
+**Version 0.1.1** — A HACS custom integration for controlling Philips Hue lights paired with **Zigbee Home Automation (ZHA)** in Home Assistant.
 
-Hue Gradient Studio stores **four individually editable three-color presets per Philips/Signify light**. The dashboard offers color pickers, multi-light selection, preset sharing, and manual or timed preset changes. Everything uses the existing ZHA connection; no Hue Bridge or Zigbee2MQTT is required.
+Hue Gradient Studio offers:
 
-**Scope and limitations:** Works with Hue lights paired through **ZHA**, not Hue Bridge lights. A true three-color gradient requires a compatible Hue gradient lamp; normal Hue color bulbs show only the middle preset color. The Philips-specific `0xFC03` Zigbee command is model-dependent. Test each new gradient-capable model individually, verify its endpoint, and use **Solid color** for unsupported models. No hardware-wide compatibility is promised.
+- Automatic discovery of eligible Philips/Signify ZHA lights
+- Four persistent presets per light, with three editable colors each
+- A dashboard card with color pickers, previews, multi-light selection and preset copying
+- Individual or group controls, and timed automatic preset cycling
+- Home Assistant actions for automations and remotes
+- Bundled dashboard JavaScript, updated together with the integration via HACS
 
-## Install from your own GitHub repository via HACS
+Compatible Hue Gradient models can receive proprietary Zigbee cluster `0xFC03` commands. On ordinary Hue color bulbs, select **Solid color** to apply the preset's middle color. Zigbee endpoints are device-specific; the Signe Gradient table lamp has been tested with endpoint 11. Not all Hue models support multi-zone gradients.
 
-1. Publish this repository to GitHub (see [PUBLISHING.md](docs/PUBLISHING.md)). The repository must be public for ordinary HACS custom-repository use.
-2. Home Assistant: **HACS → ⋮ → Custom repositories** (or the corresponding menu in your HACS version).
-3. Enter `https://github.com/derhopp/hue-gradient-studio` and select category **Integration**; click **Add**.
-4. Open **HACS**, locate **Hue Gradient Studio**, and choose **Download** (version `0.1.0`).
-5. Restart Home Assistant: **Settings → System → Restart**.
-6. New installations: **Settings → Devices & services → Add integration**, search **Hue Gradient Studio** and finish the one-step setup. ZHA must already be configured.
-7. For an existing dashboard, use **Edit dashboard → + (new view/tab) → Edit view → ⋮ → Edit in YAML** and paste [docs/view-only.yaml](docs/view-only.yaml). The existing dashboard views remain untouched.
+## Requirements
 
-**Included in HACS updates:** Python backend, `services.yaml`, translations, and the **`hue-gradient-studio.js`** card. HACS installs everything within `custom_components/hue_gradient_studio/`. **Do not copy a JS file to `/config/www` for new installs.** In storage-mode dashboards the integration automatically creates/updates the Lovelace module resource at `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.0`. Reload the browser after installing or updating.
+- Home Assistant with ZHA configured and Philips/Signify lights paired through ZHA
+- HACS
+- An administrator account to configure the integration
 
-If your Lovelace configuration uses `resource_mode: yaml`, add the resource manually in `configuration.yaml` (UI resource registration cannot modify YAML-mode resources):
+This integration uses ZHA directly. Hue Bridge and Zigbee2MQTT devices are not supported.
+
+## Install with HACS
+
+1. Open **HACS → ⋮ → Custom repositories**.
+2. Add `https://github.com/derhopp/hue-gradient-studio` with category **Integration**.
+3. In HACS, open **Hue Gradient Studio → Download**.
+4. Restart Home Assistant using **Settings → System → Restart**.
+5. Go to **Settings → Devices & services → Add integration**, search for **Hue Gradient Studio**, and complete the setup.
+6. Confirm that **Hue Gradient Studio** appears under **Settings → Devices & services → Integrations**.
+
+The integration serves its own JavaScript card and registers `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.1` as a Lovelace **JavaScript Module** in storage resource mode.
+
+If your Lovelace resources are configured in YAML mode, include the resource in your existing Lovelace resources configuration:
 
 ```yaml
 lovelace:
   resource_mode: yaml
   resources:
-    - url: /hue-gradient-studio/hue-gradient-studio.js?v=0.1.0
+    - url: /hue-gradient-studio/hue-gradient-studio.js?v=0.1.1
       type: module
 ```
 
-For storage mode, the fallback manual path is **Settings → Dashboards → ⋮ → Resources → Add resource**, URL `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.0`, type **JavaScript Module**. Normally this is unnecessary: if the resource has not appeared shortly after startup, check **Settings → System → Logs** before adding it yourself. If the dashboard displays **Custom element doesn't exist: hue-gradient-studio**, check this resource URL and type, then reload the browser. Avoid duplicate resource entries.
+For storage mode, check **Settings → Dashboards → ⋮ → Resources** if the card does not appear. There should be one module resource for `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.1`. Avoid duplicate resources and reload the dashboard after an update.
 
-## Upgrade from the original manually installed v3.0.1
+## Add the card to an existing dashboard
 
-1. **Create a Home Assistant backup** (including `.storage`) before replacing custom-component files.
-2. Add the GitHub repository to HACS and install v0.1.0. HACS will manage the same `/config/custom_components/hue_gradient_studio/` directory. **Do not delete this directory before the HACS install** and **do not delete `.storage/hue_gradient_studio`**.
-3. Restart Home Assistant. Your stored selections, four presets per lamp, and automatic settings will be loaded from the existing storage file. The integration domain and service names are unchanged.
-4. In **Settings → Dashboards → ⋮ → Resources**, **remove the obsolete** `/local/hue-gradient-studio.js?v=3` resource. The old file in `/config/www/` can be deleted *later*, after checking the new version. The old resource may otherwise win the custom-element registration race and hide future frontend updates.
-5. Your existing tab that uses `type: custom:hue-gradient-studio` **stays exactly as it is**; no dashboard re-import is required. Hard-refresh the browser (on macOS Safari, close/reopen the tab or clear site cache).
-6. To migrate from **legacy YAML setup** to UI setup: go to **Settings → Devices & services → Add integration → Hue Gradient Studio** and complete the setup. Then **remove only** the `hue_gradient_studio: {}` line from `configuration.yaml`, check the configuration, and restart Home Assistant. This does *not* remove your saved presets. Alternatively, leave the YAML line in place: v0.1.0 supports it for compatibility. Do **not** remove your `homeassistant:` or unrelated dashboard configuration.
+Open **Edit dashboard** and create or edit a tab. In its **View configuration → Edit in YAML** paste [docs/view-only.yaml](docs/view-only.yaml). This modifies only that tab; it does not replace the other views.
 
-## Usage
-
-After selecting lights in the Gradient Studio dashboard, you can call these actions from **Developer tools → Actions** or from a Hue Dimmer V2 automation:
+Alternatively, add a single **Manual card** using:
 
 ```yaml
-# Switch to the next preset for all selected lights
-- action: hue_gradient_studio.next
-
-# Set preset 2 for the saved selection
-- action: hue_gradient_studio.apply
-  data:
-    preset: 2
-
-# Set a preset on a specific ZHA light, bypassing the dashboard selection
-- action: hue_gradient_studio.apply
-  data:
-    entity_id: light.philips_hue_schreibtisch
-    preset: 3
-
-# Start automatic cycling for the saved selection
-- action: hue_gradient_studio.set_auto
-  data:
-    enabled: true
+type: custom:hue-gradient-studio
+title: Hue Gradient Studio
 ```
 
-These are **examples for the `actions:` section of a Home Assistant automation**. In **Developer tools → Actions**, use a single action at a time without the leading `-`. See [docs/example_automations.yaml](docs/example_automations.yaml).
+The card offers lamp selection, four named three-color presets per lamp, per-lamp mode and Zigbee endpoint, preset copying, and automatic switching.
 
-## Compatibility and upgrades
+## Home Assistant actions
 
-- Requires **Home Assistant 2025.7 or newer** and ZHA.
-- Every HACS release should have a published GitHub **Release** with a tag matching `manifest.json` (`0.1.0`, then `0.1.1`, ...). A Git tag without an actual GitHub Release is not sufficient for proper HACS version tracking.
-- HACS updates the code; you must **restart Home Assistant** to load new Python code. The dashboard JS is updated with the same release and versioned resource URL.
-- Storage is under `/config/.storage/hue_gradient_studio`, managed by Home Assistant. **Do not add `.storage` to the GitHub repository and do not edit it manually.**
-- `services.yaml` actions: `hue_gradient_studio.apply`, `.next`, `.previous`, `.set_auto`.
-- The UI is an optional bundled dashboard custom card, not a separate HACS Dashboard plugin.
-- If a lamp is not listed: check that it is a light device whose integration is ZHA and manufacturer contains Philips or Signify, and that it is enabled.
+Select lights in the card, then use these actions through **Developer tools → Actions** or automations:
 
-## For the repository owner
+```yaml
+# Next saved preset for the selected lamps
+action: hue_gradient_studio.next
+```
 
-Follow **[docs/PUBLISHING.md](docs/PUBLISHING.md)** for a complete macOS Terminal/GitHub CLI walkthrough: replacing GitHub owner placeholders, creating the public repository, pushing `main`, publishing release `0.1.0`, testing HACS, and publishing future versions.
+```yaml
+# Apply preset 2 to selected lamps
+action: hue_gradient_studio.apply
+data:
+  preset: 2
+```
 
-For the official HACS catalog (rather than a custom repository), additional publisher requirements may apply, such as Home Assistant Brands. Listing in the catalog is **not** required to install or update this repository as a HACS custom integration. See [HACS integration publishing rules](https://hacs.dev/docs/publish/integration/).
+```yaml
+# Apply preset 3 to a specific ZHA light
+action: hue_gradient_studio.apply
+data:
+  entity_id: light.example_hue_gradient
+  preset: 3
+```
 
-## Tests
+```yaml
+# Enable timed switching for the selected lamps
+action: hue_gradient_studio.set_auto
+data:
+  enabled: true
+```
+
+Available actions: `hue_gradient_studio.apply`, `.next`, `.previous`, and `.set_auto`. See [example automations](docs/example_automations.yaml).
+
+## Settings and updates
+
+Presets, active selections, and auto-cycle settings are stored by Home Assistant in `/config/.storage/hue_gradient_studio`. They are not stored in GitHub. Include Home Assistant configuration and storage in your backups.
+
+Install updates in **HACS**, then restart Home Assistant. Home Assistant updates the JavaScript resource URL according to the integration version. Reopen or refresh your dashboard to load the current card.
+
+To troubleshoot:
+
+- **Custom element doesn't exist: hue-gradient-studio**: Verify the JavaScript Module under **Settings → Dashboards → ⋮ → Resources**, check **Settings → System → Logs**, and reload the browser.
+- **No lights listed**: Confirm that the lamp is enabled, paired through ZHA, and has manufacturer Philips/Signify.
+- **Gradient not applied**: Confirm the lamp supports multi-zone gradients, test its endpoint, or select **Solid color**.
+- **Integration missing from Integrations**: Ensure setup was completed through **Settings → Devices & services → Add integration** and restart Home Assistant.
+
+## Development and releases
+
+The integration lives in `custom_components/hue_gradient_studio/` and its dashboard card is bundled under `frontend/`. See [publishing instructions](docs/PUBLISHING.md).
+
+Run local tests:
 
 ```bash
 python3 -m compileall -q custom_components tests
@@ -91,8 +116,8 @@ node --check custom_components/hue_gradient_studio/frontend/hue-gradient-studio.
 node tests/test_ui.cjs
 ```
 
-These are offline smoke tests, not a live test against your installed Home Assistant/Zigbee hardware.
+These are offline tests; device behavior must also be verified with actual ZHA hardware.
 
 ## License
 
-MIT license. See [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).

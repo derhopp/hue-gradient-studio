@@ -110,15 +110,15 @@ class TestManager(unittest.IsolatedAsyncioTestCase):
         self.manager._on_stop(None)
         await asyncio.sleep(0)
 
-    async def test_ui_setup_registers_resource_and_does_not_duplicate_yaml_setup(self):
+    async def test_ui_setup_registers_resource_once(self):
         class Resources:
             loaded = True
             def __init__(self): self.rows = []
             def async_items(self): return self.rows
             async def async_create_item(self, data):
-                self.rows.append({'id': len(self.rows) + 1, **data})
+                self.rows.append({'id': len(self.rows) + 1, 'url': data['url'], 'type': data['res_type']})
             async def async_update_item(self, index, data):
-                self.rows[index - 1].update(data)
+                self.rows[index - 1].update({'url': data['url'], 'type': data['res_type']})
 
         class HTTP:
             def __init__(self): self.static_paths = []
@@ -127,17 +127,20 @@ class TestManager(unittest.IsolatedAsyncioTestCase):
         self.hass.http = HTTP()
         self.hass.state = 'running'
         resources = Resources()
-        self.hass.data['lovelace'] = SimpleNamespace(mode='storage', resources=resources)
-        self.assertTrue(await integration.async_setup(self.hass, {}))
-        self.assertNotIn('hue_gradient_studio', self.hass.data)
+        self.hass.data['lovelace'] = SimpleNamespace(resource_mode='storage', resources=resources)
+
+        self.assertFalse(hasattr(integration, 'async_setup'))
         self.assertTrue(await integration.async_setup_entry(self.hass, SimpleNamespace()))
         await asyncio.sleep(0)
         self.assertEqual(len(self.hass.http.static_paths), 1)
         self.assertEqual(len(resources.rows), 1)
-        self.assertEqual(resources.rows[0]['url'], '/hue-gradient-studio/hue-gradient-studio.js?v=' + (await fake_get_integration(self.hass, 'hue_gradient_studio')).version)
+        version = (await fake_get_integration(self.hass, 'hue_gradient_studio')).version
+        self.assertEqual(resources.rows[0]['url'], '/hue-gradient-studio/hue-gradient-studio.js?v=' + version)
+
         manager = self.hass.data['hue_gradient_studio']
-        self.assertTrue(await integration.async_setup(self.hass, {'hue_gradient_studio': {}}))
+        self.assertTrue(await integration.async_setup_entry(self.hass, SimpleNamespace()))
         self.assertIs(self.hass.data['hue_gradient_studio'], manager)
+        self.assertEqual(len(self.hass.http.static_paths), 1)
         manager._on_stop(None)
 
     async def test_discovery_and_independent_presets(self):

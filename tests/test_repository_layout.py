@@ -23,6 +23,17 @@ class RepositoryStructureTests(unittest.TestCase):
         self.assertTrue((COMPONENT / 'config_flow.py').is_file())
         self.assertTrue((COMPONENT / 'frontend_resources.py').is_file())
         self.assertEqual(len(list((ROOT / 'custom_components').iterdir())), 1)
+        self.assertEqual(manifest['integration_type'], 'hub')
+
+    def test_ui_only_setup_and_dashboard(self):
+        backend = (COMPONENT / '__init__.py').read_text(encoding='utf-8')
+        frontend = (COMPONENT / 'frontend' / 'hue-gradient-studio.js').read_text(encoding='utf-8')
+        self.assertIn('async def async_setup_entry(', backend)
+        self.assertNotIn('async def async_setup(', backend)
+        self.assertNotIn('CONFIG_SCHEMA', backend)
+        self.assertNotIn('import_legacy', backend)
+        self.assertNotIn('import_legacy', frontend)
+        self.assertNotIn('data-import', frontend)
 
 
 if __name__ == '__main__':

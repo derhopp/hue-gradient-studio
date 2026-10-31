@@ -1,5 +1,5 @@
-/* Hue Gradient Studio v0.1.0 — custom Lovelace card, no external JS libraries.
- * Bundled with the HACS integration; no separate /config/www installation required.
+/* Hue Gradient Studio v0.1.1 — custom Lovelace card, no external JS libraries.
+ * Installed and updated with the HACS integration.
  * Four persistent, per-light 3-color presets, multiple light target selection.
  */
 (() => {
@@ -195,7 +195,7 @@
                 <option value="false" ${!dev.settings.auto?'selected':''}>Aus</option><option value="true" ${dev.settings.auto?'selected':''}>Ein</option>
               </select></div>
             </div>
-            <div class="buttons"><button data-save-config="1">Einstellungen speichern</button><button data-import="1">Alte Signe-Presets importieren</button></div>
+            <div class="buttons"><button data-save-config="1">Einstellungen speichern</button></div>
             <p class="caption">Bei normalen Hue-Lampen nur „Einzelfarbe (Mitte)“ verwenden. Gradient-Cluster 0xFC03 funktioniert ausschließlich auf kompatiblen Hue-Gradient-Modellen. Der Endpoint 11 ist für die getestete Signe bekannt, bei anderen Modellen ggf. anpassen.</p>
             <div class="spacer"></div>
             <div class="panels">${presets.map((p,i) => `
@@ -280,11 +280,6 @@
           targets: [...this._selected].filter(i => i !== this._editDeviceId)}),
         'Vier Presets auf die Auswahl kopiert.');
       });
-      $('[data-import]')?.addEventListener('click', () => {
-        if (!confirm('Die gespeicherten 4 alten Signe-Presets (soweit vorhanden) in diese Lampe importieren?')) return;
-        this._act(() => this._request('import_legacy', {device_id: this._editDeviceId}),
-          'Import aus alten Signe-Helpern abgeschlossen.');
-      });
     }
 
     _updateBadge(i) {
@@ -330,7 +325,7 @@
   if (!customElements.get('hue-gradient-studio')) customElements.define('hue-gradient-studio', HueGradientStudio);
   window.customCards = window.customCards || [];
   if (!window.customCards.some(c => c.type === 'hue-gradient-studio')) {
-    window.customCards.push({type: 'hue-gradient-studio', name: 'Hue Gradient Studio v0.1.0',
+    window.customCards.push({type: 'hue-gradient-studio', name: 'Hue Gradient Studio v0.1.1',
       description: 'Multi-light ZHA editor, per-device 4×3 colors, automatic cycling', preview: false});
   }
 })();

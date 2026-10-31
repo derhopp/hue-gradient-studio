@@ -37,6 +37,7 @@ assert(card.shadowRoot.innerHTML.includes('Mein Gradient Studio'));
 assert(card.shadowRoot.innerHTML.includes('type="color"'));
 assert(card.shadowRoot.innerHTML.includes('Automatik für Auswahl'));
 assert(card.shadowRoot.innerHTML.includes('Preset 4'));
+assert(!card.shadowRoot.innerHTML.includes('data-import'));
 card._updateColor(0,0,'#123456');
 assert(card._dirty.has('dev123/0'));
 assert(card._presets()[0].colors[0] === '#123456');
