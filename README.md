@@ -1,6 +1,6 @@
 # Hue Gradient Studio
 
-**HACS custom integration for Home Assistant ZHA** — configure, save and switch color-gradient presets on Philips Hue lights. Current integration version: **0.1.3**.
+**HACS custom integration for Home Assistant ZHA** — configure, save and switch color-gradient presets on Philips Hue lights. Current integration version: **0.1.4**.
 
 > [!IMPORTANT]
 > **AI-GENERATED / AI-ASSISTED SOFTWARE — UNOFFICIAL PROJECT**
@@ -56,7 +56,7 @@ Set the language in your Home Assistant **user profile**. The card reflects lang
 The integration bundles the Lovelace JavaScript card. In **storage resource mode**, it registers the following **JavaScript Module** automatically:
 
 ```text
-/hue-gradient-studio/hue-gradient-studio.js?v=0.1.3
+/hue-gradient-studio/hue-gradient-studio.js?v=0.1.4
 ```
 
 If the card does not load, see [Troubleshooting](#troubleshooting) before adding any duplicate resources.
@@ -257,7 +257,7 @@ See [more automation examples](docs/example_automations.yaml).
 
 | Problem | Check |
 |---|---|
-| **Custom element doesn't exist: hue-gradient-studio** | Under **Settings → Dashboards → ⋮ → Resources**, check the module resource `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.3`; avoid duplicates, inspect **Settings → System → Logs**, then reload the browser |
+| **Custom element doesn't exist: hue-gradient-studio** | Under **Settings → Dashboards → ⋮ → Resources**, check the module resource `/hue-gradient-studio/hue-gradient-studio.js?v=0.1.4`; avoid duplicates, inspect **Settings → System → Logs**, then reload the browser |
 | Card opens but no lamps are listed | Make sure the lamps are enabled, connected to **ZHA** and reported as Philips/Signify |
 | Pressing a button affects the wrong lamps | Check the **checkbox selection**; the edit-lamp dropdown is separate |
 | Changing a color does not change the lamp | Use **"Save"** to store the preset, then **"Apply to this light"** or **"Apply to selection"** to apply it |
@@ -282,6 +282,12 @@ node tests/test_ui.cjs
 ```
 
 These tests do **not** replace live testing with actual Zigbee devices, security review, or testing across Home Assistant versions.
+
+## Original project icon
+
+The project icon is an **original, AI-generated abstract color-wave illustration** created specifically for Hue Gradient Studio. It uses only generic gradient shapes and colors; it does **not** contain or reproduce Philips, Hue, Signify, Home Assistant, HACS, or other companies' logos or wordmarks.
+
+The image is provided with the project under the [MIT License](LICENSE). This does not grant permission to use any third-party trademark or suggest endorsement by any trademark owner.
 
 ## Trademarks and independent-project notice
 

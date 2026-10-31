@@ -31,16 +31,16 @@ GitHub Actions runs the same smoke tests plus HACS validation on pushes and pull
 Increase `manifest.json` and the dashboard card's displayed version with the script:
 
 ```bash
-python3 scripts/bump_version.py 0.1.4
+python3 scripts/bump_version.py 0.1.5
 ```
 
-Create `docs/RELEASE_NOTES_0.1.4.md`, including accurate changes for that release. Check that version references match and run the tests.
+Create `docs/RELEASE_NOTES_0.1.5.md`, including accurate changes for that release. Check that version references match and run the tests.
 
 ```bash
 git status
 git diff --check
 git add .
-git commit -m "Release 0.1.4"
+git commit -m "Release 0.1.5"
 git push origin main
 ```
 
@@ -52,7 +52,7 @@ Inspect the result with GitHub CLI:
 
 ```bash
 gh release list
-gh release view 0.1.4 --web
+gh release view 0.1.5 --web
 ```
 
 ## Install or update in HACS
@@ -70,4 +70,4 @@ The integration serves its own Lovelace JavaScript module at `/hue-gradient-stud
 - Keep `hacs.json`, `README.md`, `LICENSE`, and `custom_components/hue_gradient_studio/manifest.json` at the expected paths.
 - Maintain a useful GitHub Description and Topics.
 - Avoid committing configuration secrets, Home Assistant backups, or `.storage` files.
-- Use semantic versions and publish a unique GitHub Release for each HACS update. The current documentation-only release is `0.1.3`.
+- Use semantic versions and publish a unique GitHub Release for each HACS update. The current branding refresh release is `0.1.4`.

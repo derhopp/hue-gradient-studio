@@ -1,6 +1,6 @@
-import { TRANSLATIONS, languageFromHass } from './i18n.js?v=0.1.3';
+import { TRANSLATIONS, languageFromHass } from './i18n.js?v=0.1.4';
 
-/* Hue Gradient Studio v0.1.3 — custom Lovelace card, no external JS libraries.
+/* Hue Gradient Studio v0.1.4 — custom Lovelace card, no external JS libraries.
  * AI-assisted software: substantial parts of this project were developed with
  * OpenAI ChatGPT. This is an independent, unofficial community integration;
  * it is not endorsed by Philips, Signify, Home Assistant, or HACS.
@@ -344,7 +344,7 @@ import { TRANSLATIONS, languageFromHass } from './i18n.js?v=0.1.3';
   if (!customElements.get('hue-gradient-studio')) customElements.define('hue-gradient-studio', HueGradientStudio);
   window.customCards = window.customCards || [];
   if (!window.customCards.some(c => c.type === 'hue-gradient-studio')) {
-    window.customCards.push({type: 'hue-gradient-studio', name: 'Hue Gradient Studio v0.1.3',
+    window.customCards.push({type: 'hue-gradient-studio', name: 'Hue Gradient Studio v0.1.4',
       description: 'Multi-light ZHA editor, per-device 4×3 colors, automatic cycling', preview: false});
   }
 })();
