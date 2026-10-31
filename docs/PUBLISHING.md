@@ -28,13 +28,15 @@ GitHub Actions runs the same smoke tests plus HACS validation on pushes and pull
 
 ## Release a new version
 
-Increase `manifest.json` and the dashboard card's displayed version with the script:
+Use the maintainer-only helper to update the version in `manifest.json`, both visible version labels in the dashboard JavaScript, and the JavaScript translation import cache parameter (`i18n.js?v=...`):
 
 ```bash
 python3 scripts/bump_version.py 0.1.5
 ```
 
 Create `docs/RELEASE_NOTES_0.1.5.md`, including accurate changes for that release. Check that version references match and run the tests.
+
+The script is optional developer tooling; it is **not** used at runtime by Home Assistant, HACS, or GitHub Actions. The repository initialization helper has been removed because this repository is already published.
 
 ```bash
 git status

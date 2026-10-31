@@ -24,6 +24,8 @@ class RepositoryStructureTests(unittest.TestCase):
         self.assertTrue((COMPONENT / 'frontend_resources.py').is_file())
         self.assertEqual(len(list((ROOT / 'custom_components').iterdir())), 1)
         self.assertEqual(manifest['integration_type'], 'hub')
+        self.assertTrue((ROOT / 'scripts' / 'bump_version.py').is_file())
+        self.assertFalse((ROOT / 'scripts' / 'prepare_repository.py').exists())
 
     def test_ui_only_setup_and_dashboard(self):
         backend = (COMPONENT / '__init__.py').read_text(encoding='utf-8')
