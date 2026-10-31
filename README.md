@@ -1,6 +1,6 @@
 # Hue Gradient Studio
 
-**HACS custom integration for Home Assistant ZHA** — configure, save and switch color-gradient presets on Philips Hue lights. Current integration version: **0.1.1**.
+**HACS custom integration for Home Assistant ZHA** — configure, save and switch color-gradient presets on Philips Hue lights. Current integration version: **0.1.2**.
 
 > [!IMPORTANT]
 > **AI-GENERATED SOFTWARE / MIT KI ERSTELLTE SOFTWARE**
@@ -10,6 +10,16 @@
 > **English:** This integration — including substantial parts of its Python and JavaScript code, tests, and documentation — was developed using **OpenAI ChatGPT**. It is an experimental, AI-assisted community project, **not** an official Philips, Signify, Home Assistant, or HACS integration. AI-generated software can contain bugs; it has **not been independently security-audited or exhaustively hardware-tested**. Use it at your own risk.
 
 The integration uses the existing **Zigbee Home Automation (ZHA)** network. It requires **no Hue Bridge** and does not use Zigbee2MQTT. It provides four editable three-color presets **per lamp**; you can manage multiple lamps and control them from the dashboard, scripts, automations, or a Zigbee remote.
+
+## Languages / Sprachen
+
+The integration supports **English and German only**. Its dashboard card follows your **Home Assistant user-interface language** automatically:
+
+- **Deutsch** (`de`, `de-DE`, `de-AT`, `de-CH`): German buttons, labels, descriptions and messages.
+- **English** (`en`, `en-US`, `en-GB`): English UI.
+- **Other interface languages**: English fallback; no additional translations are shipped.
+
+Set the language in your Home Assistant **user profile**. The card reflects language changes without deleting presets or modifying their user-defined names. Home Assistant setup and action descriptions have English and German translations as well.
 
 ## What it does
 
@@ -68,7 +78,7 @@ The integration uses the existing **Zigbee Home Automation (ZHA)** network. It r
 The integration bundles the Lovelace JavaScript card. In **storage resource mode**, it registers the following **JavaScript Module** automatically:
 
 \`\`\`text
-/hue-gradient-studio/hue-gradient-studio.js?v=0.1.1
+/hue-gradient-studio/hue-gradient-studio.js?v=0.1.2
 \`\`\`
 
 If the card does not load, see [Troubleshooting](#troubleshooting) before adding any duplicate resources.
@@ -269,7 +279,7 @@ See [more automation examples](docs/example_automations.yaml).
 
 | Problem | Check |
 |---|---|
-| **Custom element doesn't exist: hue-gradient-studio** | Under **Settings → Dashboards → ⋮ → Resources**, check the module resource \`/hue-gradient-studio/hue-gradient-studio.js?v=0.1.1\`; avoid duplicates, inspect **Settings → System → Logs**, then reload the browser |
+| **Custom element doesn't exist: hue-gradient-studio** | Under **Settings → Dashboards → ⋮ → Resources**, check the module resource \`/hue-gradient-studio/hue-gradient-studio.js?v=0.1.2\`; avoid duplicates, inspect **Settings → System → Logs**, then reload the browser |
 | Card opens but no lamps are listed | Make sure the lamps are enabled, connected to **ZHA** and reported as Philips/Signify |
 | Pressing a button affects the wrong lamps | Check the **checkbox selection**; the edit-lamp dropdown is separate |
 | Changing a color does not change the lamp | Use **„Speichern“** to store the preset, then **„Auf diese Lampe“** or **„Auf Auswahl“** to apply it |

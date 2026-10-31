@@ -9,5 +9,55 @@
     "abort": {
       "already_configured": "Hue Gradient Studio is already configured."
     }
+  },
+  "services": {
+    "apply": {
+      "name": "Apply gradient",
+      "description": "Apply a preset to selected Philips Hue lights (ZHA).",
+      "fields": {
+        "entity_id": {
+          "name": "Lights",
+          "description": "Optional. Omit to use the saved dashboard selection."
+        },
+        "preset": {
+          "name": "Preset",
+          "description": "Preset 1–4. Omit to use each lamp's active preset."
+        }
+      }
+    },
+    "next": {
+      "name": "Next gradient",
+      "description": "Switch selected lamps to their next preset.",
+      "fields": {
+        "entity_id": {
+          "name": "Lights",
+          "description": "Optional. Omit to use the saved dashboard selection."
+        }
+      }
+    },
+    "previous": {
+      "name": "Previous gradient",
+      "description": "Switch selected lamps to their previous preset.",
+      "fields": {
+        "entity_id": {
+          "name": "Lights",
+          "description": "Optional. Omit to use the saved dashboard selection."
+        }
+      }
+    },
+    "set_auto": {
+      "name": "Automatic gradient cycling",
+      "description": "Enable or disable automatic cycling for selected lamps.",
+      "fields": {
+        "entity_id": {
+          "name": "Lights",
+          "description": "Optional. Omit to use the saved dashboard selection."
+        },
+        "enabled": {
+          "name": "Enable",
+          "description": "Whether automatic cycling is enabled."
+        }
+      }
+    }
   }
 }

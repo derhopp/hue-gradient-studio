@@ -15,7 +15,14 @@ const context = {
   clearInterval:()=>{},
   confirm:()=>true,
 };
-vm.runInNewContext(fs.readFileSync(__dirname + '/../custom_components/hue_gradient_studio/frontend/hue-gradient-studio.js','utf8'), context);
+const root = __dirname + '/../custom_components/hue_gradient_studio/frontend/';
+const translationSource = fs.readFileSync(root + 'i18n.js', 'utf8');
+const translated = translationSource
+  .replace('export const TRANSLATIONS', 'const TRANSLATIONS')
+  .replace('export function languageFromHass', 'function languageFromHass');
+const cardSource = fs.readFileSync(root + 'hue-gradient-studio.js', 'utf8')
+  .replace(/^import \{ TRANSLATIONS, languageFromHass \} from ['"]\.\/i18n\.js\?v=[^'"]+['"];\s*/, '');
+vm.runInNewContext(translated + '\n' + cardSource, context);
 const Card = elements.get('hue-gradient-studio');
 assert(Card, 'card should register');
 const card = new Card();
@@ -34,6 +41,19 @@ card._editDeviceId='dev123';
 card._selected.add('dev123');
 card._render();
 assert(card.shadowRoot.innerHTML.includes('Mein Gradient Studio'));
+assert(card.shadowRoot.innerHTML.includes('1. Select lights'));
+card._language = 'de';
+card._render();
+assert(card.shadowRoot.innerHTML.includes('1. Lampen auswählen'));
+card._language = 'en';
+card._render();
+assert(card.shadowRoot.innerHTML.includes('1. Select lights'));
+assert(!card.shadowRoot.innerHTML.includes('1. Lampen auswählen'));
+card._language = 'fr';
+card._render();
+assert(card.shadowRoot.innerHTML.includes('1. Select lights'));
+card._language = 'de';
+card._render();
 assert(card.shadowRoot.innerHTML.includes('type="color"'));
 assert(card.shadowRoot.innerHTML.includes('Automatik für Auswahl'));
 assert(card.shadowRoot.innerHTML.includes('Preset 4'));

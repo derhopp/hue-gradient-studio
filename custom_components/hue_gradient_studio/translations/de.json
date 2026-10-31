@@ -9,5 +9,55 @@
     "abort": {
       "already_configured": "Hue Gradient Studio ist bereits eingerichtet."
     }
+  },
+  "services": {
+    "apply": {
+      "name": "Farbverlauf anwenden",
+      "description": "Ein Preset auf ausgewählte Philips-Hue-Lampen (ZHA) anwenden.",
+      "fields": {
+        "entity_id": {
+          "name": "Lampen",
+          "description": "Optional. Ohne Angabe wird die gespeicherte Auswahl aus dem Dashboard verwendet."
+        },
+        "preset": {
+          "name": "Preset",
+          "description": "Preset 1–4. Ohne Angabe wird das aktive Preset jeder Lampe verwendet."
+        }
+      }
+    },
+    "next": {
+      "name": "Nächster Farbverlauf",
+      "description": "Bei ausgewählten Lampen zum nächsten Preset wechseln.",
+      "fields": {
+        "entity_id": {
+          "name": "Lampen",
+          "description": "Optional. Ohne Angabe wird die gespeicherte Dashboard-Auswahl verwendet."
+        }
+      }
+    },
+    "previous": {
+      "name": "Vorheriger Farbverlauf",
+      "description": "Bei ausgewählten Lampen zum vorherigen Preset wechseln.",
+      "fields": {
+        "entity_id": {
+          "name": "Lampen",
+          "description": "Optional. Ohne Angabe wird die gespeicherte Dashboard-Auswahl verwendet."
+        }
+      }
+    },
+    "set_auto": {
+      "name": "Automatischer Preset-Wechsel",
+      "description": "Den automatischen Preset-Wechsel für ausgewählte Lampen ein- oder ausschalten.",
+      "fields": {
+        "entity_id": {
+          "name": "Lampen",
+          "description": "Optional. Ohne Angabe wird die gespeicherte Dashboard-Auswahl verwendet."
+        },
+        "enabled": {
+          "name": "Aktivieren",
+          "description": "Legt fest, ob der automatische Wechsel aktiviert ist."
+        }
+      }
+    }
   }
 }
